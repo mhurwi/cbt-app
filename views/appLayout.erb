@@ -1,0 +1,37 @@
+<p>My Awesome App</p>
+
+<div id="app">
+	<script id="incidentTemplate" type="text/template">
+	<p>description:  {{ description }}</p>
+
+	<p>Feelings:</p>
+  <ul>
+  	{@ _.each(feelings, function(f) { @}
+  	<li>{{ f[0] }}</li> 
+  	<ul>
+	  	<li>before: {{ f[1] }}</li>
+	  	<li>after:  {{ f[2] }}</li>
+	  </ul>
+  	{@ }); @}
+  </ul>
+
+  <p>Thoughts:</p>
+  <ul>
+  	{@ _.each(thoughts, function(t) {   @}
+  		<li>{{  t[0]  }}</li>
+  		<ul>
+  		{@ _.each(t[2], function(distortion){   @}
+  			<li>{{  distortion  }}</li>
+  		{@  }); @}
+  		</ul>
+  	<li>Rational:  {{ t[1] }}</li>
+  	<br>
+  	{@  });  @}
+
+  </ul>
+
+	
+
+	</script>
+
+</div>

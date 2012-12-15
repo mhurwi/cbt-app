@@ -23,7 +23,7 @@ before '/secure/*' do
 end
 
 get '/' do
-  erb 'Can you handle a <a href="/secure/place">secret</a>?'
+  erb 'Heres a protected page: <a href="/secure/place">secret</a>'
 end
 
 get '/login/form' do 
@@ -44,4 +44,5 @@ end
 
 get '/secure/place' do
   erb "This is a secret place that only <%=session[:identity]%> has access to!"
+  erb :appLayout
 end
