@@ -264,23 +264,3 @@ Backbone.history.start({});
 
 });
 
-
-
-//  TODO
-// destroy incident
-// edit all properties of an incident
-// create new incident with all properties
-// add user Password to login
-// deploy
-// refactor Incident model to use embedded {} instead of simple arrays
-		// ie: feelings = [ {'feeling': 'sad', 'intensityBefore':10, 'intensityAfter:2'}]
-
-
-// DONE!!
-
-// create new incident with just description
-// edit incident description
-// expand/collapse behavior for incidents in collection
-// show all incidents
-// show 1 incident
-// hook up to MongoDB for persisitence of data

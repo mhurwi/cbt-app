@@ -55,9 +55,13 @@ TO ACCESS PROTECTED PAGE:
 
 ##TODO
 * destroy incident
+* put sample incidents in local Database collection
 * edit all properties of an incident
 * create new incident with all properties
+* create form wizard UI to create incident in sequence approprite for Cognitive Behavioral Therapy
 * add user Password to login
+* add password protection for API routes
+	* should be same as route for ' get '/cbt*' '
 * deploy
 * refactor Incident model to use embedded {} instead of simple arrays
 	* ie: feelings = [ {'feeling': 'sad', 'intensityBefore':10,*intensityAfter:2'}]
