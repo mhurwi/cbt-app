@@ -63,8 +63,14 @@ App.Views.Incidents = Backbone.View.extend({
 
 	render: function(){
 		//filter all incidents
-		//for each create new view
-		//render view and append the el to the collection el
+		this.collection.each(function(incident){
+			//for each create new view
+			var incidentView = new App.Views.Incident({ model: incident });
+			//render view and append the el to the collection el
+			this.$el.append(incidentView.render().el);
+		}, this);
+		return this;
+		
 	}
 });
 
@@ -94,16 +100,16 @@ var incident = new App.Models.Incident({
 });
 
 //new single incident view
-var incidentView = new App.Views.Incident({ model: incident });
+//var incidentView = new App.Views.Incident({ model: incident });
 
 //setup a new collection to contain incidents
 var incidents = new App.Collections.Incidents();
 incidents.add(incident);
 
 //create new collection view instance
-var incidentsView = new App.Views.Incidents({
-});
+var incidentsView = new App.Views.Incidents({ collection: incidents});
 
-$('#app').append(incidentView.render().el);
+// display the incidentsView in div#app!!!
+$('#app').append(incidentsView.render().el);
 
 });
