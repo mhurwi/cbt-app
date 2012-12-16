@@ -32,6 +32,12 @@ App.Models.Incident = Backbone.Model.extend({
 		if ( ! $.trim(attrs.description) ) {
 			return "You need to give a description of this incident in order to analyze it";
 		}
+	},
+
+	defaults: {
+		description: "",
+		feelings: ["","",""],
+		thoughts: ["","",["", ""]]
 	}
 });
 
@@ -41,7 +47,7 @@ App.Models.Incident = Backbone.Model.extend({
 App.Views.Incident = Backbone.View.extend({
 	tagName: 'div',
 
-	template: template('incidentTemplate'),
+	template: template('showIncidentTemplate'),
 
 	initialize: function() {
 		this.model.on('change', this.render, this);
@@ -67,7 +73,7 @@ App.Views.Incident = Backbone.View.extend({
 
 	remove: function(){
 		this.$el.remove();
-		$('#app').append('You have deleted this incident!');
+		$('#notices').html('You have deleted this incident!');
 	},
 
 	render: function(){
@@ -90,17 +96,46 @@ App.Collections.Incidents = Backbone.Collection.extend({
 App.Views.Incidents = Backbone.View.extend({
 	tagName: 'div',
 
+
+	initialize: function() {
+		this.collection.on('add', this.addOne, this);
+	},
+
 	render: function(){
 		//filter all incidents
-		this.collection.each(function(incident){
-			//for each create new view
-			var incidentView = new App.Views.Incident({ model: incident });
-			//render view and append the el to the collection el
-			this.$el.append(incidentView.render().el);
-		}, this);
+		this.collection.each(this.addOne, this);
+
 		return this;
-		
+	},
+
+	addOne: function(incident){
+		//for each create new view
+		var incidentView = new App.Views.Incident({ model: incident });
+		//render view and append the el to the collection el
+		this.$el.append(incidentView.render().el);
 	}
+
+});
+
+// Add an Incident
+// ---------------
+
+// logic exists to add only a single field.  How do we add an entire incident, with all its properties?
+
+App.Views.AddIncident = Backbone.View.extend({
+	el: '#addIncident',
+
+	events: {
+		'submit': 'submit'
+	},
+
+	submit: function(e) {
+		e.preventDefault();
+		var newIncidentDescription = $(e.currentTarget).find('input[type=text]').val();
+		var incident = new App.Models.Incident({ description: newIncidentDescription});
+		this.collection.add(incident);
+	}
+
 });
 
 
@@ -135,6 +170,8 @@ var incident = new App.Models.Incident({
 var incidents = new App.Collections.Incidents();
 incidents.add(incident);
 
+var addIncidentView = new App.Views.AddIncident({ collection: incidents });
+
 //create new collection view instance
 var incidentsView = new App.Views.Incidents({ collection: incidents});
 
@@ -149,6 +186,7 @@ $('#app').append(incidentsView.render().el);
 // edit incident
 // destroy incident
 // create new incident
+// expand/collapse behavior for incidents in collection
 // route to show all incidents, show 1 incident
 // hook up to MongoDB for persisitence of data
 // add user Password to login

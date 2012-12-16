@@ -1,7 +1,8 @@
 <p>My Awesome App</p>
-
+<div id="notices"></div>
 <div id="app">
-	<script id="incidentTemplate" type="text/template">
+	
+	<script id="showIncidentTemplate" type="text/template">
 	<h2>Incident</h2>
 	<p>Description:  {{ description }} 	<button class="editDescription">edit</button></p>
 
@@ -47,4 +48,8 @@
 		// form for adding a new incident
 	</script>
 
+	<form id="addIncident" action="">
+		<input type="text" placeholder="new incident...">
+		<input type="submit" value="addIncident">
+	</form>
 </div>
