@@ -44,8 +44,28 @@ TO LOG IN:
 
 TO ACCESS PROTECTED PAGE:
 
-- client requests GET '/secure/*' (any secure page)
+- client requests GET '/cbt*' (any secure page)
 - server does before filter on this request--
 - if there is NO session[:identity], that means user is not logged in, and the server provides error message 'sorry!' and sends client back to :login_form
 - if server sees that user IS logged in, and there IS a session[:identity], then server goes on to process the request, GET '/secure/[URI]'
 - Here, the server will provide the page to the logged in user.  In this case, the server will render our :appLayout page, and the authenticated user gets to use the app.
+
+
+
+
+##TODO
+* destroy incident
+* edit all properties of an incident
+* create new incident with all properties
+* add user Password to login
+* deploy
+* refactor Incident model to use embedded {} instead of simple arrays
+	* ie: feelings = [ {'feeling': 'sad', 'intensityBefore':10,*intensityAfter:2'}]
+
+##DONE!!
+* create new incident with just description
+* edit incident description
+* expand/collapse behavior for incidents in collection
+* show all incidents
+* show 1 incident
+* hook up to MongoDB for persisitence of data
