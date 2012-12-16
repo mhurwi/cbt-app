@@ -69,7 +69,7 @@ end
 post '/api/:incidents' do 
   # parse the post body of the content being posted, convert to a string, insert into 
   # the collection #thing and return the ObjectId as a string for reference 
-  oid = DB.collection(params[:incidents]).insert(JSON.parse(request.body.read.tos)) 
+  oid = DB.collection(params[:incidents]).insert(JSON.parse(request.body.read.to_s)) 
   "{\"id\": \"#{oid.to_s}\"}" 
 end 
 delete '/api/:incidents/:id' do 
@@ -80,11 +80,11 @@ end
 put '/api/:incidents/:id' do 
   # collection.update() when used with $set (as covered earlier) allows us to set single values 
   # in this case, the put request body is converted to a string, rejecting keys with the name 'id' for security purposes 
-  DB.collection(params[:incidents]).update({'id' => tobsonid(params[:id])}, {'$set' => JSON.parse(request.body.read.tos).reject{|k,v| k == 'id'}}) 
+  DB.collection(params[:incidents]).update({'id' => tobsonid(params[:id])}, {'$set' => JSON.parse(request.body.read.to_s).reject{|k,v| k == 'id'}}) 
 end 
 # utilities for generating/converting MongoDB ObjectIDs
 def tobsonid(id) BSON::ObjectId.fromstring(id) end 
-def frombsonid(obj) obj.merge({'id' => obj['id'].tos}) end
+def frombsonid(obj) obj.merge({'id' => obj['id'].to_s}) end
 
 
 

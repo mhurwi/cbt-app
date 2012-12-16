@@ -31,16 +31,15 @@ window.template = function(id) {
 // ------
 App.Router = Backbone.Router.extend({
 	routes: {
-		'': 'index',
+		'':'index',
 		'incidents': 'showAllIncidents',
 		'incident/:id': 'showIncident',
 		'search/:query': 'search',
 		'*other': 'defaults'
 	},
 
-	index: function(){
-		console.log("hi from index in backbone route!");
-		vent.trigger('incidents:index', incidents);
+	index: function() {
+		$('#app').html("<p>Index page!  Try going to #incidents");
 	},
 
 	showAllIncidents: function() {
@@ -144,8 +143,8 @@ App.Views.Incidents = Backbone.View.extend({
 
 	initialize: function() {
 		vent.on('incident:show', this.showIncident, this);
+		vent.on('incidents:showAll', this.showAll, this);
 		this.collection.on('add', this.addOne, this);
-		this.collection.on('incidents:showAll', this.render, this);
 		this.collection.fetch();
 
 		//instantiate and add incident view
@@ -162,6 +161,11 @@ App.Views.Incidents = Backbone.View.extend({
 		$('#addIncident').hide();
 		return this;
 
+	},
+
+	showAll: function() {
+		this.collection.fetch();
+		this.render();
 	},
 
 	render: function(){
@@ -241,7 +245,10 @@ var incident2 = new App.Models.Incident({
 		]
 });
 
-var incidents = new App.Collections.Incidents([incident1, incident2]);
+var incidents = new App.Collections.Incidents();
+incidents.add(incident1);
+incidents.add(incident2);
+
 
 
 //instantiate a single incident view
@@ -250,7 +257,7 @@ var incidents = new App.Collections.Incidents([incident1, incident2]);
 
 //create new collection view instance
 var incidentsView = new App.Views.Incidents({ collection: incidents});
-
+console.log(incidentsView.el);
 
 
 // display the incidentsView in div#app!!!
