@@ -3,10 +3,13 @@
 <div id="app">
 	<script id="incidentTemplate" type="text/template">
 	<h2>Incident</h2>
-	<p>Description:  {{ description }}</p>
+	<p>Description:  {{ description }} 	<button class="editDescription">edit</button></p>
+
+
 
 	<p>Feelings:</p>
   <ul>
+  	<!--// List Feelings and intensityBefore & intensityAfter-->
   	{@ _.each(feelings, function(f) { @}
   	<li>{{ f[0] }}</li> 
   	<ul>
@@ -16,15 +19,19 @@
   	{@ }); @}
   </ul>
 
+
   <p>Thoughts:</p>
   <ul>
+  	<!-- // Thoughts -->
   	{@ _.each(thoughts, function(t) {   @}
   		<li>{{  t[0]  }}</li>
   		<ul>
+  	<!-- 	// Distortions -->
   		{@ _.each(t[2], function(distortion){   @}
   			<li>{{  distortion  }}</li>
   		{@  }); @}
   		</ul>
+  	<!-- // Rational version of thoughts -->
   	<li>Rational:  {{ t[1] }}</li>
   	<br>
   	{@  });  @}

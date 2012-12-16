@@ -1,4 +1,4 @@
-$(document).ready(function() {
+   $(document).ready(function() {
 
 
 // use {{ }} for templating, to avoid conflict with ERB
@@ -28,6 +28,11 @@ window.template = function(id) {
 // Incident-- single
 //------------------
 App.Models.Incident = Backbone.Model.extend({
+	validate: function(attrs){
+		if ( ! $.trim(attrs.description) ) {
+			return "You need to give a description of this incident in order to analyze it";
+		}
+	}
 });
 
 
@@ -39,6 +44,17 @@ App.Views.Incident = Backbone.View.extend({
 	template: template('incidentTemplate'),
 
 	initialize: function() {
+		this.model.on('change', this.render, this);
+	},
+
+	events: {
+		'click .editDescription': 'editDescription'
+	},
+
+	editDescription: function(){
+		var newIncidentDescription = prompt("What happened?", this.model.get('description'));
+		if (!newIncidentDescription) return;  //first validation to ensure theres a valid description
+		this.model.set('description', newIncidentDescription);
 	},
 
 	render: function(){
@@ -113,3 +129,14 @@ var incidentsView = new App.Views.Incidents({ collection: incidents});
 $('#app').append(incidentsView.render().el);
 
 });
+
+
+
+//  TODO
+// edit incident
+// destroy incident
+// create new incident
+// route to show all incidents, show 1 incident
+// hook up to MongoDB for persisitence of data
+// add user Password to login
+// deploy
