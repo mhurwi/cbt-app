@@ -1,0 +1,8 @@
+.incidentDescription {
+	font-size: 1.4em;
+}
+
+.incidentDescriptionHover {
+	border: 1px solid gray;
+	background: gray;
+}

@@ -3,53 +3,70 @@
 <div id="app">
 	
 	<script id="showIncidentTemplate" type="text/template">
-	<h2>Incident</h2>
-	<p>Description:  {{ description }} 	<button class="editDescription">edit</button></p>
+  
+  <div class="showIncident">
+    <p class="incidentDescription">Description:  {{ description }} </p>
 
-
-
-	<p>Feelings:</p>
-  <ul>
-  	<!--// List Feelings and intensityBefore & intensityAfter-->
-  	{@ _.each(feelings, function(f) { @}
-  	<li>{{ f[0] }}</li> 
-  	<ul>
-	  	<li>before: {{ f[1] }}</li>
-	  	<li>after:  {{ f[2] }}</li>
-	  </ul>
-  	{@ }); @}
-  </ul>
-
-
-  <p>Thoughts:</p>
-  <ul>
-  	<!-- // Thoughts -->
-  	{@ _.each(thoughts, function(t) {   @}
-  		<li>{{  t[0]  }}</li>
-  		<ul>
-  	<!-- 	// Distortions -->
-  		{@ _.each(t[2], function(distortion){   @}
-  			<li>{{  distortion  }}</li>
-  		{@  }); @}
-  		</ul>
-  	<!-- // Rational version of thoughts -->
-  	<li>Rational:  {{ t[1] }}</li>
-  	<br>
-  	{@  });  @}
-
-  </ul>
-
- 	<button class="destroyIncident">Delete this entry</button>
+      <div class="incidentInfo" style="display:none">
+      	<p>Feelings:</p>
+          <ul>
+          	<!--// List Feelings and intensityBefore & intensityAfter-->
+          	{@ _.each(feelings, function(f) { @}
+          	<li>{{ f[0] }}</li> 
+          	<ul>
+        	  	<li>before: {{ f[1] }}</li>
+        	  	<li>after:  {{ f[2] }}</li>
+        	  </ul>
+          	{@ }); @}
+          </ul>
+        <p>Thoughts:</p>
+          <ul>
+          	<!-- // Thoughts -->
+          	{@ _.each(thoughts, function(t) {   @}
+          		<li>{{  t[0]  }}</li>
+          		<ul>
+          	<!-- 	// Distortions -->
+          		{@ _.each(t[2], function(distortion){   @}
+          			<li>{{  distortion  }}</li>
+          		{@  }); @}
+          		</ul>
+          	<!-- // Rational version of thoughts -->
+          	<li>Rational:  {{ t[1] }}</li>
+          	<br>
+          	{@  });  @}
+          </ul>      
+        <button class="editDescription">edit</button>
+       	<button class="destroyIncident">Delete this entry</button>
+        <br><br>
+      </div> <!-- //end incidentInfo -->
+    </div>
 	</script>
 
-
-
-	<script id="newIncident">
-		// form for adding a new incident
-	</script>
 
 	<form id="addIncident" action="">
 		<input type="text" placeholder="new incident...">
 		<input type="submit" value="addIncident">
 	</form>
+
+
 </div>
+
+
+<script type="text/javascript">
+  $(document).ready(function(){
+
+    <!-- //add hover on description to indicate you can click it -->
+    $('.incidentDescription').hover(function(){
+      $(this).toggleClass('incidentDescriptionHover');
+    });
+
+    <!-- // click to show the rest of the incident info -->
+    $('.incidentDescription').click(function(){
+      $(this).next().slideToggle();
+    });
+
+
+  });
+
+
+</script>

@@ -1,4 +1,4 @@
-   $(document).ready(function() {
+$(document).ready(function() {
 
 
 // use {{ }} for templating, to avoid conflict with ERB
@@ -17,6 +17,8 @@ window.App = {
 	Router: {}
 };
 
+// pub/sub object
+var vent = _.extend({}, Backbone.Events);
 
 // Helper methods for templates
 //-----------------------------
@@ -25,9 +27,49 @@ window.template = function(id) {
 };
 
 
+// Router
+// ------
+App.Router = Backbone.Router.extend({
+	routes: {
+		'': 'index',
+		'incidents': 'showAllIncidents',
+		'incident/:id': 'showIncident',
+		'search/:query': 'search',
+		'*other': 'defaults'
+	},
+
+	index: function(){
+		console.log("hi from index in backbone route!");
+		vent.trigger('incidents:index', incidents);
+	},
+
+	showAllIncidents: function() {
+		vent.trigger('incidents:showAll');
+		console.log('route for showAllIncidents');
+	},
+
+	showIncident: function(id) {
+		vent.trigger('incident:show', id);
+	},
+
+	search: function(query) {
+		console.log('you searched for:  ' + query);
+	},
+
+	defaults: function(other)  {
+		console.log('whoops, not sure what you mean by:  ' + other);
+	}
+
+});
+
+
+
 // Incident-- single
 //------------------
 App.Models.Incident = Backbone.Model.extend({
+
+	idAttribute: '_id',
+
 	validate: function(attrs){
 		if ( ! $.trim(attrs.description) ) {
 			return "You need to give a description of this incident in order to analyze it";
@@ -73,6 +115,7 @@ App.Views.Incident = Backbone.View.extend({
 
 	remove: function(){
 		this.$el.remove();
+		// should flash notice that 'you have deleted this thing!'
 		$('#notices').html('You have deleted this incident!');
 	},
 
@@ -87,7 +130,10 @@ App.Views.Incident = Backbone.View.extend({
 // Incidents Collection -- many
 // ----------------------------
 App.Collections.Incidents = Backbone.Collection.extend({
-	model: App.Models.Incident
+	model: App.Models.Incident,
+
+	// set where the collection is to create/read/update/delete
+	url: '/api/incidents'
 });
 
 
@@ -96,15 +142,31 @@ App.Collections.Incidents = Backbone.Collection.extend({
 App.Views.Incidents = Backbone.View.extend({
 	tagName: 'div',
 
-
 	initialize: function() {
+		vent.on('incident:show', this.showIncident, this);
 		this.collection.on('add', this.addOne, this);
+		this.collection.on('incidents:showAll', this.render, this);
+		this.collection.fetch();
+
+		//instantiate and add incident view
+		var addIncidentView = new App.Views.AddIncident({ collection: incidents });
+
+	},
+
+	showIncident: function(id) {
+		var incident = this.collection.get(id);
+		var incidentView = new App.Views.Incident({ model: incident });
+		//replace html with the single model that we want
+		this.$el.html(incidentView.render().el);
+		//hide the 'add incident' view
+		$('#addIncident').hide();
+		return this;
+
 	},
 
 	render: function(){
 		//filter all incidents
 		this.collection.each(this.addOne, this);
-
 		return this;
 	},
 
@@ -120,7 +182,8 @@ App.Views.Incidents = Backbone.View.extend({
 // Add an Incident
 // ---------------
 
-// logic exists to add only a single field.  How do we add an entire incident, with all its properties?
+// logic exists to add only a single field.
+// How do we add an entire incident, with all its properties?
 
 App.Views.AddIncident = Backbone.View.extend({
 	el: '#addIncident',
@@ -147,47 +210,77 @@ console.log('app.js is now running on this page!');
 
 
 // sample data for single incident
-var incident = new App.Models.Incident({
-	description: 'I forgot my lunch and yelled fartface loudly.',
-	feelings:[
-		//[feeling, intensityBefore, intensityAfter]
-		['sad', 10, 7],
-		['embarrassed', 8, 2],
-		['scared', 6, 2]
-	],
-	thoughts:[
-		//[thought, rational version, [*distortions]]
-		['i should be quiet', 'i was flustered', ['overgeneralizing', 'mind-reading']],
-		['i am a fartface', 'it could happen to anyone', ['labeling', 'fortune-telling']]
-	]
+var incident1 = new App.Models.Incident({
+		id:1,
+		description: 'I am a new incident!!',
+		feelings:[
+			//[feeling, intensityBefore, intensityAfter]
+			['sad', 10, 7],
+			['embarrassed', 8, 2],
+			['scared', 6, 2]
+		],
+		thoughts:[
+			//[thought, rational version, [*distortions]]
+			['i should be quiet', 'i was flustered', ['overgeneralizing', 'mind-reading']],
+			['i am a fartface', 'it could happen to anyone', ['labeling', 'fortune-telling']]
+		]
+	});
 
+var incident2 = new App.Models.Incident({
+	id:2,
+		description: 'My dog ate my shoes.',
+		feelings:[
+			//[feeling, intensityBefore, intensityAfter]
+			['angry', 10, 7],
+			['frustrated', 8, 2]
+		],
+		thoughts:[
+			//[thought, rational version, [*distortions]]
+			['he is dumb', 'he is only a dog', ['overgeneralizing', 'mind-reading']],
+			['I hate this dumb dog', 'he is my friend', ['labeling', 'fortune-telling']]
+		]
 });
 
-//new single incident view
-//var incidentView = new App.Views.Incident({ model: incident });
+var incidents = new App.Collections.Incidents([incident1, incident2]);
 
-//setup a new collection to contain incidents
-var incidents = new App.Collections.Incidents();
-incidents.add(incident);
 
-var addIncidentView = new App.Views.AddIncident({ collection: incidents });
+//instantiate a single incident view
+//var incidentView = new App.Views.Incident();
+
 
 //create new collection view instance
 var incidentsView = new App.Views.Incidents({ collection: incidents});
 
+
+
 // display the incidentsView in div#app!!!
 $('#app').append(incidentsView.render().el);
+
+//instantiate router
+new App.Router();
+// pushState:true will interfere with Sinatra routes.
+// use # for now
+Backbone.history.start({});
 
 });
 
 
 
 //  TODO
-// edit incident
 // destroy incident
-// create new incident
-// expand/collapse behavior for incidents in collection
-// route to show all incidents, show 1 incident
-// hook up to MongoDB for persisitence of data
+// edit all properties of an incident
+// create new incident with all properties
 // add user Password to login
 // deploy
+// refactor Incident model to use embedded {} instead of simple arrays
+		// ie: feelings = [ {'feeling': 'sad', 'intensityBefore':10, 'intensityAfter:2'}]
+
+
+// DONE!!
+
+// create new incident with just description
+// edit incident description
+// expand/collapse behavior for incidents in collection
+// show all incidents
+// show 1 incident
+// hook up to MongoDB for persisitence of data
