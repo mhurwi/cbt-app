@@ -45,16 +45,29 @@ App.Views.Incident = Backbone.View.extend({
 
 	initialize: function() {
 		this.model.on('change', this.render, this);
+		this.model.on('destroy', this.remove, this);
 	},
 
 	events: {
-		'click .editDescription': 'editDescription'
+		'click .editDescription': 'editDescription',
+		'click .destroyIncident': 'destroyIncident'
 	},
 
 	editDescription: function(){
 		var newIncidentDescription = prompt("What happened?", this.model.get('description'));
 		if (!newIncidentDescription) return;  //first validation to ensure theres a valid description
 		this.model.set('description', newIncidentDescription);
+	},
+
+	destroyIncident: function() {
+		//handle click to destroy the incident
+		this.model.destroy();
+
+	},
+
+	remove: function(){
+		this.$el.remove();
+		$('#app').append('You have deleted this incident!');
 	},
 
 	render: function(){
