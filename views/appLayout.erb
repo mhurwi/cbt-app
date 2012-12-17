@@ -4,7 +4,6 @@
 	
 	<script id="showIncidentTemplate" type="text/template">
   
-  <div class="showIncident">
     <p class="incidentDescription">Description:  {{ description }} </p>
 
       <div class="incidentInfo" style="display:none">
@@ -39,7 +38,6 @@
        	<button class="destroyIncident">Delete this entry</button>
         <br><br>
       </div> <!-- //end incidentInfo -->
-    </div>
 	</script>
 
 
@@ -54,17 +52,13 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-
-    <!-- //add hover on description to indicate you can click it -->
-    $('.incidentDescription').hover(function(){
+    
+    $('p.incidentDescription').hover(function(){
       $(this).toggleClass('incidentDescriptionHover');
     });
-
-    <!-- // click to show the rest of the incident info -->
     $('.incidentDescription').click(function(){
       $(this).next().slideToggle();
     });
-
 
   });
 

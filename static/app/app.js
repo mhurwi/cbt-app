@@ -31,24 +31,24 @@ window.template = function(id) {
 // ------
 App.Router = Backbone.Router.extend({
 	routes: {
-		'':'index',
+		'':'showAllIncidents',
 		'incidents': 'showAllIncidents',
-		'incident/:id': 'showIncident',
+		'incidents/:id': 'showIncident',
 		'search/:query': 'search',
 		'*other': 'defaults'
 	},
 
 	index: function() {
-		$('#app').html("<p>Index page!  Try going to #incidents");
+		$('#app').html("<p>Index page!  Try going to <a href='/cbt#incidents'>here</a>");
 	},
 
 	showAllIncidents: function() {
 		vent.trigger('incidents:showAll');
-		console.log('route for showAllIncidents');
 	},
 
 	showIncident: function(id) {
-		vent.trigger('incident:show', id);
+		vent.trigger('incidents:show', id);
+		console.log('route to show incident #' + id);
 	},
 
 	search: function(query) {
@@ -76,9 +76,9 @@ App.Models.Incident = Backbone.Model.extend({
 	},
 
 	defaults: {
-		description: "",
-		feelings: ["","",""],
-		thoughts: ["","",["", ""]]
+		"description": "",
+		"feelings": ["","",""],
+		"thoughts": ["","",["", ""]]
 	}
 });
 
@@ -120,7 +120,8 @@ App.Views.Incident = Backbone.View.extend({
 
 	render: function(){
 		var template = this.template(this.model.toJSON());
-		this.$el.html( template);
+		this.$el.html( template );
+
 		return this;
 	}
 });
@@ -142,14 +143,16 @@ App.Views.Incidents = Backbone.View.extend({
 	tagName: 'div',
 
 	initialize: function() {
-		vent.on('incident:show', this.showIncident, this);
 		vent.on('incidents:showAll', this.showAll, this);
+		vent.on('incidents:show', this.showIncident, this);
 		this.collection.on('add', this.addOne, this);
-		this.collection.fetch();
+	},
 
-		//instantiate and add incident view
-		var addIncidentView = new App.Views.AddIncident({ collection: incidents });
-
+	showAll: function() {
+		var incidents = this.collection;
+		var incidentsView = new App.Views.Incidents({ collection: incidents });
+		incidentsView.render();
+		console.log('showing all');
 	},
 
 	showIncident: function(id) {
@@ -158,14 +161,9 @@ App.Views.Incidents = Backbone.View.extend({
 		//replace html with the single model that we want
 		this.$el.html(incidentView.render().el);
 		//hide the 'add incident' view
-		$('#addIncident').hide();
-		return this;
+		//$('#addIncident').hide();
+		console.log('hello! from showIncident');
 
-	},
-
-	showAll: function() {
-		this.collection.fetch();
-		this.render();
 	},
 
 	render: function(){
@@ -200,7 +198,7 @@ App.Views.AddIncident = Backbone.View.extend({
 		e.preventDefault();
 		var newIncidentDescription = $(e.currentTarget).find('input[type=text]').val();
 		var incident = new App.Models.Incident({ description: newIncidentDescription});
-		this.collection.add(incident);
+		this.collection.create(incident);
 	}
 
 });
@@ -215,7 +213,7 @@ console.log('app.js is now running on this page!');
 
 // sample data for single incident
 var incident1 = new App.Models.Incident({
-		id:1,
+		_id:1,
 		description: 'I am a new incident!!',
 		feelings:[
 			//[feeling, intensityBefore, intensityAfter]
@@ -231,7 +229,7 @@ var incident1 = new App.Models.Incident({
 	});
 
 var incident2 = new App.Models.Incident({
-	id:2,
+	_id:2,
 		description: 'My dog ate my shoes.',
 		feelings:[
 			//[feeling, intensityBefore, intensityAfter]
@@ -246,24 +244,13 @@ var incident2 = new App.Models.Incident({
 });
 
 var incidents = new App.Collections.Incidents();
-incidents.add(incident1);
-incidents.add(incident2);
+// incidents.add(incident1);
+incidents.fetch({add: true});
 
-
-
-//instantiate a single incident view
-//var incidentView = new App.Views.Incident();
-
-
-//create new collection view instance
 var incidentsView = new App.Views.Incidents({ collection: incidents});
-console.log(incidentsView.el);
+$('#app').html(incidentsView.render().el);
 
 
-// display the incidentsView in div#app!!!
-$('#app').append(incidentsView.render().el);
-
-//instantiate router
 new App.Router();
 // pushState:true will interfere with Sinatra routes.
 // use # for now
