@@ -34,6 +34,7 @@ App.Router = Backbone.Router.extend({
 		'':'index',
 		'incidents': 'showAllIncidents',
 		'incidents/:id': 'showIncident',
+		'create': 'createIncident',
 		'search/:query': 'search',
 		'*other': 'defaults'
 	},
@@ -51,8 +52,18 @@ App.Router = Backbone.Router.extend({
 		console.log('route to show incident #' + id);
 	},
 
+	createIncident: function() {
+		vent.trigger('incidents:create');
+		this.navigate("create", {trigger: true});
+	},
+
 	search: function(query) {
 		console.log('you searched for:  ' + query);
+	},
+
+	testRoute: function(){
+		vent.trigger('testRoute');
+		console.log('im in teh router testRoute');
 	},
 
 	defaults: function(other)  {
@@ -163,9 +174,8 @@ App.Views.Incidents = Backbone.View.extend({
 		incidents.fetch({add: true});
 		var incidentsView = new App.Views.Incidents({ collection: incidents });
 		incidentsView.render();
-		console.log('showing all');
-		var addIncident = new App.Views.AddIncident();
-		$('#app').append($('#addIncident'));
+		$('#app').append(incidentsView.render().el);
+		console.log('showing all incidents from collection');
 	},
 
 	showIncident: function(id) {
@@ -196,23 +206,29 @@ App.Views.Incidents = Backbone.View.extend({
 
 // logic exists to add only a single field.
 // How do we add an entire incident, with all its properties?
-
-App.Views.AddIncident = Backbone.View.extend({
+App.Views.Create = Backbone.View.extend({
 	el: '#addIncident',
 
 	events: {
 		'submit': 'submit'
 	},
 
+	initialize: function() {
+		console.log('im in initialize for Create');
+		vent.on('incidents:create', this.createIncident, this);
+	},
+
+	createIncident: function() {
+		$('#app').html($('#addIncident'));
+		$('#addIncident').show();
+		console.log('im in createIncident, no shit. weird.');
+	},
+
 	submit: function(e) {
 		e.preventDefault();
-		var newIncidentDescription = $(e.currentTarget).find('input[type=text]').val();
-		var incident = new App.Models.Incident({ description: newIncidentDescription});
-		this.collection.create(incident);
+		console.log('you submit from the testroute');
 	}
-
 });
-
 
 
 //  Bootstrap and run the app
@@ -253,15 +269,11 @@ var incident2 = new App.Models.Incident({
 		]
 });
 
+
 var incidents = new App.Collections.Incidents();
-//incidents.add(incident1);
-//incidents.create(incident1);
-//incidents.insert(incident2);
-//incidents.fetch({add: true});
 
 var incidentsView = new App.Views.Incidents({ collection: incidents});
-$('#app').append(incidentsView.render().el);
-
+var createView = new App.Views.Create();
 
 new App.Router();
 // pushState:true will interfere with Sinatra routes.
