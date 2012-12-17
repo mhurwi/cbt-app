@@ -203,39 +203,38 @@ App.Views.Incidents = Backbone.View.extend({
 
 // Add an Incident
 // ---------------
-
-// logic exists to add only a single field.
-// How do we add an entire incident, with all its properties?
 App.Views.Create = Backbone.View.extend({
-	el: '#addIncident',
+	el: '#createIncident',
 
 	events: {
 		'submit': 'submit'
 	},
 
 	initialize: function() {
-		console.log('im in initialize for Create');
 		vent.on('incidents:create', this.createIncident, this);
 	},
 
 	createIncident: function() {
-		$('#app').html($('#addIncident'));
-		$('#addIncident').show();
-		console.log('im in createIncident, no shit. weird.');
+		$('#app').html($('#createIncident'));
+		$('#createIncident').show();
 	},
 
 	submit: function(e) {
 		e.preventDefault();
-		console.log('you submit from the testroute');
+		// gather the values from the form
+		// save as a new incident in the collection
+		// redirect to incidents/:id to show this incident
+		var newIncidentDescription = $(e.currentTarget).find('input[name=description]').val();
+		var incident = new App.Models.Incident({description: newTaskTitle});
+		this.collection.create(task);
 	}
 });
 
 
+
+
 //  Bootstrap and run the app
 // --------------------------
-
-console.log('app.js is now running on this page!');
-
 
 // sample data for single incident
 var incident1 = new App.Models.Incident({
@@ -279,6 +278,8 @@ new App.Router();
 // pushState:true will interfere with Sinatra routes.
 // use # for now
 Backbone.history.start({});
+
+console.log('app.js is now running on this page!');
 
 });
 
