@@ -201,7 +201,7 @@ App.Views.Incidents = Backbone.View.extend({
 
 });
 
-// Add an Incident
+// Create an Incident
 // ---------------
 App.Views.Create = Backbone.View.extend({
 	el: '#createIncident',
@@ -211,22 +211,23 @@ App.Views.Create = Backbone.View.extend({
 	},
 
 	initialize: function() {
-		vent.on('incidents:create', this.createIncident, this);
+		vent.on('incidents:create', this.showForm, this);
 	},
 
-	createIncident: function() {
-		$('#app').html($('#createIncident'));
-		$('#createIncident').show();
+	showForm: function() {
+		$('#app').append(this.$el);
+		//return this;
 	},
 
 	submit: function(e) {
 		e.preventDefault();
+		console.log('you are clicking the submit button!');
 		// gather the values from the form
 		// save as a new incident in the collection
 		// redirect to incidents/:id to show this incident
-		var newIncidentDescription = $(e.currentTarget).find('input[name=description]').val();
-		var incident = new App.Models.Incident({description: newTaskTitle});
-		this.collection.create(task);
+		// var newIncidentDescription = $(e.currentTarget).find('input[type=text]').val();
+		// var incident = new App.Models.Incident({description: newTaskTitle});
+		// $('#app').append(newIncidentDescription);
 	}
 });
 
@@ -272,8 +273,8 @@ var incident2 = new App.Models.Incident({
 var incidents = new App.Collections.Incidents();
 
 var incidentsView = new App.Views.Incidents({ collection: incidents});
-var createView = new App.Views.Create();
 
+var createView = new App.Views.Create({ collection: incidents });
 new App.Router();
 // pushState:true will interfere with Sinatra routes.
 // use # for now
