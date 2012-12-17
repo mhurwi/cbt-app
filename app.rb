@@ -1,6 +1,6 @@
 # dev hint: shotgun login.rb
-require 'rubygems'
 require 'mongo'
+#require 'bson_ext'
 require 'json'
 require 'sinatra'
 

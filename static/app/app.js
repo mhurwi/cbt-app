@@ -31,7 +31,7 @@ window.template = function(id) {
 // ------
 App.Router = Backbone.Router.extend({
 	routes: {
-		'':'showAllIncidents',
+		'':'index',
 		'incidents': 'showAllIncidents',
 		'incidents/:id': 'showIncident',
 		'search/:query': 'search',
@@ -39,7 +39,7 @@ App.Router = Backbone.Router.extend({
 	},
 
 	index: function() {
-		$('#app').html("<p>Index page!  Try going to <a href='/cbt#incidents'>here</a>");
+		this.navigate("incidents", {trigger: true});
 	},
 
 	showAllIncidents: function() {
@@ -97,7 +97,17 @@ App.Views.Incident = Backbone.View.extend({
 
 	events: {
 		'click .editDescription': 'editDescription',
-		'click .destroyIncident': 'destroyIncident'
+		'click .destroyIncident': 'destroyIncident',
+		'hover .incidentDescription': 'hover',
+		'click .incidentDescription': 'toggleInfo'
+	},
+
+	hover: function() {
+		$('.incidentDescription').toggleClass('incidentDescriptionHover');
+	},
+
+	toggleInfo: function(){
+		$('.incidentInfo').slideToggle();
 	},
 
 	editDescription: function(){
@@ -150,18 +160,18 @@ App.Views.Incidents = Backbone.View.extend({
 
 	showAll: function() {
 		var incidents = this.collection;
+		incidents.fetch({add: true});
 		var incidentsView = new App.Views.Incidents({ collection: incidents });
 		incidentsView.render();
 		console.log('showing all');
+		var addIncident = new App.Views.AddIncident();
+		$('#app').append($('#addIncident'));
 	},
 
 	showIncident: function(id) {
 		var incident = this.collection.get(id);
 		var incidentView = new App.Views.Incident({ model: incident });
-		//replace html with the single model that we want
 		this.$el.html(incidentView.render().el);
-		//hide the 'add incident' view
-		//$('#addIncident').hide();
 		console.log('hello! from showIncident');
 
 	},
@@ -244,11 +254,13 @@ var incident2 = new App.Models.Incident({
 });
 
 var incidents = new App.Collections.Incidents();
-// incidents.add(incident1);
-incidents.fetch({add: true});
+//incidents.add(incident1);
+//incidents.create(incident1);
+//incidents.insert(incident2);
+//incidents.fetch({add: true});
 
 var incidentsView = new App.Views.Incidents({ collection: incidents});
-$('#app').html(incidentsView.render().el);
+$('#app').append(incidentsView.render().el);
 
 
 new App.Router();
