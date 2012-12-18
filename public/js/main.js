@@ -28,7 +28,7 @@ var AppRouter = Backbone.Router.extend({
         incidentList.fetch({success: function(){
             $("#content").html(new IncidentListView({model: incidentList, page: p}).el);
         }});
-        this.headerView.selectMenuItem('home-menu');
+        this.headerView.selectMenuItem('browse-menu');
     },
 
     incidentDetails: function (id) {
@@ -40,8 +40,11 @@ var AppRouter = Backbone.Router.extend({
     },
 
 	addIncident: function() {
+        // create a new incident object, leave it blank
         var incident = new Incident();
+        // create a new incident view, using the blank incident
         $('#content').html(new IncidentView({model: incident}).el);
+        //add .active to the menu item
         this.headerView.selectMenuItem('add-menu');
 	},
 

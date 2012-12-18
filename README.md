@@ -1,19 +1,35 @@
 # CBT app
 
-## Notes
-
-/public/js/models/models.js
-
-* validation
-
-/public/js/main.js
-
-* Routes
-* load template using utils.loadTemplate
-* initialize app (new router)
+## Todo
+### form to create new incident
+* add another distortion for each thought
+* break out form into wizard, using CBT wizard steps (below)
 
 
 
+## Done!!
+* created 'add another' for feelings and thoughts
+
+## CBT wizard
+These are the steps for the form wizard:
+
+1. Describe the event
+	* description
+2. List all your feelings and the intensity you are feeling it at this point in time. 
+	* feelings.feeling
+	* feeling.feeling.intensityBefore
+3. List all your thoughts concerning the incident.
+	* thoughts.thought
+4. For each thought, list all the distortions present in the thought.
+	* thoughts.thought.distortions []
+5. For each thought, enter a rational version of that thought.
+	* thoughts.thought.rationalThought
+6. For each feeling listed in step 2, enter the intensity you now feel the feeling, after having completed the process.  The intensity should have decreased substantially.
+	* feelings.feeling.intensityAfter
+
+
+
+---
 
 # Thanks to Chris Coenraets for his Nodecellar application
 [On github](https://github.com/ccoenraets/nodecellar)

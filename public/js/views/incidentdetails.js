@@ -13,6 +13,8 @@ window.IncidentView = Backbone.View.extend({
         "change"        : "change",
         "click .save"   : "beforeSave",
         "click .delete" : "deleteIncident",
+        "click .addAnotherFeeling": "addAnotherFeeling",
+        "click .addAnotherThought": "addAnotherThought",
         "drop #picture" : "dropHandler"
     },
 
@@ -69,6 +71,20 @@ window.IncidentView = Backbone.View.extend({
             }
         });
         return false;
+    },
+
+    addAnotherFeeling: function(e){
+        e.preventDefault();
+        var newInput = document.createElement("input");
+        newInput.innerHTML = "<br><input type='text' name='feeling' style='width: 90%;'><% feeling.feeling %></input>";
+        $('.feelings-controls').append(newInput);
+    },
+
+    addAnotherThought: function(e){
+        e.preventDefault();
+        var newInput = document.createElement("input");
+        newInput.innerHTML = "<br><input type='text' name='thought' style='width: 90%;'><% thought.thought %></input>";
+        $('.thoughts-controls').append(newInput);
     },
 
     dropHandler: function (event) {
