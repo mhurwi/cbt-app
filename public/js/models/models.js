@@ -36,14 +36,15 @@ window.Incident = Backbone.Model.extend({
     defaults: {
         _id: null,
         description: "",
-        feelings: null,
+        feelings: {},
+        // [
         //     {
-        //     feeling: "",
+        //     feelingName: "",
         //     intensityBefore: "",
         //     intensityAfter:""
         //     }
         // ],
-        thoughts: null,
+        thoughts: {},
         // [
         //     {
         //     thought: "",
