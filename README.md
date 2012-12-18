@@ -1,78 +1,44 @@
-Hello!
-====
-
-This is a demonstrator for [Sinatra](http://www.sinatrarb.com/) and [Twitter Bootstrap](http://twitter.github.com/bootstrap/). 
-
-Use it as a boilerplate to start your own apps.
-
-Go!
-===
-
-Download and run sinatra-bootstrap:
-
-	git clone git@github.com:pokle/sinatra-bootstrap.git
-
-	cd sinatra-bootstrap
-    bundle install				# To install sinatra
-
-	ruby app.rb 				# To run the sample
-	
-Then open [http://localhost:4567/](http://localhost:4567/)
-
-
-todo
-----
-- get app.js to load on /secure/place
-- get app.js to render and display a thing with title on the page, in #app
+# CBT app
 
 
 
+# Thanks to Chris Coenraets for his Nodecellar application
+[On github](https://github.com/ccoenraets/nodecellar)
 
-Notes
-=====
+### Node Cellar Sample Application with Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB #
 
-run with: 'shotgun app.rb'
+"Node Cellar" is a sample CRUD application built with with Backbone.js, Twitter Bootstrap, Node.js, Express, and MongoDB.
 
-TO LOG IN:
+The application allows you to browse through a list of incidents, as well as add, update, and delete incidents.
 
-- client requests GET '/login/form'
-- client enters name into input with name="username"
-- client hits submit button which sends POST to '/login/attempt'
-- Server gets params['username'] and sets session[:identity] to it
-- Then server redirects client back to either previous_url or '/'
-- client is now LOGGED IN
+This application is further documented [here](http://coenraets.org/blog).
 
-TO ACCESS PROTECTED PAGE:
-
-- client requests GET '/cbt*' (any secure page)
-- server does before filter on this request--
-- if there is NO session[:identity], that means user is not logged in, and the server provides error message 'sorry!' and sends client back to :login_form
-- if server sees that user IS logged in, and there IS a session[:identity], then server goes on to process the request, GET '/secure/[URI]'
-- Here, the server will provide the page to the logged in user.  In this case, the server will render our :appLayout page, and the authenticated user gets to use the app.
+The application is also hosted online. You can test it [here](http://nodecellar.coenraets.org).
 
 
+## To run the application on your own Heroku account:##
 
+1. Install the [Heroku Toolbelt](http://toolbelt.heroku.com)
 
-##TODO
-* trying to save an incident, 500 server error, : 
-	* BSON::InvalidObjectId: illegal ObjectId format: 1
+2. [Sign up](http://heroku.com/signup) for a Heroku account
 
-* destroy incident
-* put sample incidents in local Database collection
-* edit all properties of an incident
-* create new incident with all properties
-* create form wizard UI to create incident in sequence approprite for Cognitive Behavioral Therapy
-* add user Password to login
-* add password protection for API routes
-	* should be same as route for ' get '/cbt*' '
-* deploy
-* refactor Incident model to use embedded {} instead of simple arrays
-	* ie: feelings = [ {'feeling': 'sad', 'intensityBefore':10,*intensityAfter:2'}]
+3. Login to Heroku from the `heroku` CLI:
 
-##DONE!!
-* create new incident with just description
-* edit incident description
-* expand/collapse behavior for incidents in collection
-* show all incidents
-* show 1 incident
-* hook up to MongoDB for persisitence of data
+        $ heroku login
+
+4. Create a new app on Heroku:
+
+        $ heroku create
+
+5. Add the [MongoLab Heroku Add-on](http://addons.heroku.com/mongolab)
+
+        $ heroku addons:add mongolab
+
+6. Upload the app to Heroku:
+
+        $ git push heroku master
+
+7. Open the app in your browser:
+
+        $ heroku open
+
