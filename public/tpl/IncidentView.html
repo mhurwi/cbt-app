@@ -26,6 +26,24 @@
             </div>
           </div>
 
+          <div class="incidentInfo">
+            <% _.each(feelings, function(f) { %>
+            <ul>
+              <li><%= f.feelingName %></li>
+              <li><%= f.intensityBefore %></li>
+              <li><%= f.intensityAfter %></li>
+            </ul>
+            <% }); %>
+
+            <% _.each(thoughts, function(t) { %>
+            <ul>
+              <li><%= t.thought %></li>
+              <li><%= t.distortions %></li>
+              <li><%= t.rationalThought %></li>
+            </ul>
+            <% }); %>
+          </div>
+
 
           <div class="control-group">
             <label for="feeling" class="control-label">Feelings:</label>

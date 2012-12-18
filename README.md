@@ -28,6 +28,86 @@ These are the steps for the form wizard:
 	* feelings.feeling.intensityAfter
 
 
+## Incident Model
+* does this model need nested models & relationships?  Or are they just embedded attributes
+
+<pre>
+{
+  "description": "I feel happy",
+  "feelings": [
+    {
+      "feelingName": "fun",
+      "intensityBefore": 10,
+      "intensityAfter": 2
+    },
+    {
+      "feelingName": "silly",
+      "intensityBefore": 9,
+      "intensityAfter": 3
+    }
+  ],
+  "thoughts": [
+    {
+      "thought": "im laughing",
+      "distortions": [
+        "labeling",
+        "overgeneralization"
+      ],
+      "rationalThought": "right i am laughing"
+    },
+    {
+      "thought": "im jumping",
+      "distortions": [
+        "labeling",
+        "overgeneralization"
+      ],
+      "rationalThought": "you bet i am"
+    }
+  ],
+  "_id": "50d0d3e477206f7683000001"
+}
+</pre>
+
+Using Backbone.Relational, it seems like 'feelings' should be a nested model, like this:
+<pre>
+var Feeling = Backbone.RelationalModel.extend({
+	urlRoot: '/api/feelings',
+	idAttribute: '_id',
+});
+
+var Thought = Backbone.RelationalModel.extend({
+	urlRoot: '/api/thoughts',
+	idAttribute: '_id',
+});
+</pre>
+And the Incident model would be:
+<pre>
+window.Incident = Backbone.RelationalModel.extend({
+	urlRoot: '/api/incidents',
+	idAttribute: '_id',
+	relations:[{
+		type: Backbone.HasMany,
+		key: 'feelings',
+		relatedModel: 'Feeling',
+		reverseRelation: {
+			key: 'incident', 
+			includeInJson: '_id'
+		},
+		{
+		type: Backbone.HasMany,
+		key: 'thoughts',
+		relatedModel: 'Thought',
+		reverseRelation: {
+			key: 'incident', 
+			includeInJson: '_id'
+		}
+	}]
+
+	// rest of model...
+
+})
+</pre>
+
 
 ---
 
