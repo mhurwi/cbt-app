@@ -222,6 +222,7 @@ App.Views.Create = Backbone.View.extend({
 	submit: function(e) {
 		e.preventDefault();
 		console.log('you are clicking the submit button!');
+
 		// gather the values from the form
 		// save as a new incident in the collection
 		// redirect to incidents/:id to show this incident
@@ -271,6 +272,8 @@ var incident2 = new App.Models.Incident({
 
 
 var incidents = new App.Collections.Incidents();
+incidents.add(incident1);
+incident1.save();
 
 var incidentsView = new App.Views.Incidents({ collection: incidents});
 
@@ -281,6 +284,8 @@ new App.Router();
 Backbone.history.start({});
 
 console.log('app.js is now running on this page!');
+
+
 
 });
 
