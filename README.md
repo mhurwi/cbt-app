@@ -54,6 +54,9 @@ TO ACCESS PROTECTED PAGE:
 
 
 ##TODO
+* trying to save an incident, 500 server error, : 
+	* BSON::InvalidObjectId: illegal ObjectId format: 1
+
 * destroy incident
 * put sample incidents in local Database collection
 * edit all properties of an incident
