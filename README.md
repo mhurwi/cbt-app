@@ -1,5 +1,18 @@
 # CBT app
 
+## Notes
+
+/public/js/models/models.js
+
+* validation
+
+/public/js/main.js
+
+* Routes
+* load template using utils.loadTemplate
+* initialize app (new router)
+
+
 
 
 # Thanks to Chris Coenraets for his Nodecellar application
