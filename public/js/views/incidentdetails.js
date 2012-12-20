@@ -1,7 +1,11 @@
 window.IncidentView = Backbone.View.extend({
 
     initialize: function () {
+        _.bindAll(this, 'render', 'render_feeling', 'render_thought', 'on_feeling_submit', 'on_thought_submit');
         this.render();
+        this.model.bind('add:feelings', this.render_feeling);
+        this.model.bind('add:thoughts', this.render_thought);
+
     },
 
     render: function () {
@@ -15,8 +19,42 @@ window.IncidentView = Backbone.View.extend({
         "click .delete" : "deleteIncident",
         "click .addAnotherFeeling": "addAnotherFeeling",
         "click .addAnotherThought": "addAnotherThought",
-        "drop #picture" : "dropHandler"
+        "drop #picture" : "dropHandler",
+        "click .newFeelingButton": "on_feeling_submit",
+        "click .newThoughtButton": "on_thought_submit"
     },
+
+    render_feeling: function(feeling) {
+        var feeling_view = new IncidentView({ model: feeling });
+        this.$('div.feelings_list').append($(feeling_view.render() ));
+    },
+
+    render_thought: function(thought) {
+        var thought_view = new IncidentView({ model: thought });
+        this.$('div.thoughts_list').append($(thought_view.render() ));
+    },
+
+    on_feeling_submit: function(e) {
+        var new_feeling = new Feeling({
+            name: this.$('.new_feeling_name').val(),
+            intensityBefore: this.$('.new_feeling_intensityBefore').val(),
+            intensityAfter: this.$('.new_feeling_intensityAfter').val(),
+            incident: this.model._id
+            });
+        new_feeling.save();
+        
+    },
+
+    on_thought_submit: function(e) {
+    var new_thought = new Thought({
+        name: this.$('.new_thought_thought').val(),
+        intensityBefore: this.$('.new_thought_distortions').val(),
+        intensityAfter: this.$('.new_thought_rationalThought').val(),
+        incident: this.model
+        });
+    new_feeling.save();
+    },
+
 
     change: function (event) {
         // Remove any existing alert message
@@ -102,4 +140,37 @@ window.IncidentView = Backbone.View.extend({
         reader.readAsDataURL(this.pictureFile);
     }
 
+});
+
+
+window.FeelingView = Backbone.View.extend({
+    tagName: 'div',
+
+    className: 'feeling_view',
+
+    initialize: function(){
+        _.bindAll(this, 'render');
+        this.model.bind('change', this.render);
+    },
+
+    render: function() {
+        return $(this.el).html(this.template(this.model.toJSON()));
+        console.log('im from FeelingView');
+    }
+});
+
+
+window.ThoughtView = Backbone.View.extend({
+    tagName: 'div',
+
+    className: 'thought_view',
+
+    initialize: function(){
+        _.bindAll(this, 'render');
+        this.model.bind('change', this.render);
+    },
+
+    render: function() {
+        return $(this.el).html(this.template(this.model.toJSON()));
+    },
 });

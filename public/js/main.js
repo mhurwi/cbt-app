@@ -32,7 +32,7 @@ var AppRouter = Backbone.Router.extend({
     },
 
     incidentDetails: function (id) {
-        var incident = new Incident({_id: id});
+        var incident = Incident.findOrCreate({_id: id});
         incident.fetch({success: function(){
             $("#content").html(new IncidentView({model: incident}).el);
         }});
@@ -58,7 +58,8 @@ var AppRouter = Backbone.Router.extend({
 
 });
 
-utils.loadTemplate(['HomeView', 'HeaderView', 'IncidentView', 'IncidentListItemView', 'AboutView'], function() {
+utils.loadTemplate(['HomeView', 'HeaderView', 'IncidentView', 'IncidentListItemView', 'AboutView',
+                    'FeelingView', 'ThoughtView'], function() {
     app = new AppRouter();
     Backbone.history.start();
 });

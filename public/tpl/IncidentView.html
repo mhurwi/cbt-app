@@ -26,43 +26,31 @@
             </div>
           </div>
 
-          <div class="incidentInfo">
-            <% _.each(feelings, function(f) { %>
-            <ul>
-              <li><%= f.feelingName %></li>
-              <li><%= f.intensityBefore %></li>
-              <li><%= f.intensityAfter %></li>
+
+        <div class="span6">
+                
+          <div class="feelings_list control-group"></div>
+          <h2>New Feeling</h2>
+          <ul>
+              <li>Name: <input class="new_feeling_name" type="text" /></li>
+              <li>intensityBefore: <input class="new_feeling_intensityBefore" /></li>
+              <li>intensityAfter: <input class="new_feeling_intensityAfter" /></li>
+              <input class="new_feeling_incident" value="<%= _id %>"   disabled  />
+
+          </ul>
+          <input type="submit" value="Post feeling" class="newFeelingButton" />
+
+            
+          <div class="thoughts_list"></div>
+          <h2>New thought</div>
             </ul>
-            <% }); %>
+                <li>Thought: <input class="new_thought_thought" type="text" /></li>
+                <li>Distortions: <input class="new_thought_distortions" /></li>
+                <li>Rational Thought: <input class="new_thought_rationalThought" /></li>
 
-            <% _.each(thoughts, function(t) { %>
-            <ul>
-              <li><%= t.thought %></li>
-              <li><%= t.distortions %></li>
-              <li><%= t.rationalThought %></li>
             </ul>
-            <% }); %>
-          </div>
-
-
-          <div class="control-group">
-            <label for="feeling" class="control-label">Feelings:</label>
-            <div class="controls feelings-controls">              
-              <input id="feelings" name="feelings" style="width: 90%;"></input>
-            </div>
-
-            <button class="addAnotherFeeling">add another</button>
-          </div>
-
-
-          <div class="control-group">
-            <label for="thoughts" class="control-label">Thoughts</label>
-            <div class="controls thoughts-controls">              
-              <input id="thoughts" name="thoughts" style="width: 90%;"><%= thoughts %></input>
-            </div>
-            <button class="addAnotherThought">add another</button>
-          </div>
-          
+            <input type="submit" value="Post thought" class="newThoughtButton" />
+        </div>
 
         </div>
 

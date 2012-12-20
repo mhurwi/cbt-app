@@ -94,14 +94,7 @@ var populateDB = function() {
     var incidents = [
     {
         description: "I feel happy",
-        feelings: [
-            {feelingName: 'fun', intensityBefore: 10, intensityAfter: 2 },
-            {feelingName: 'silly', intensityBefore: 9, intensityAfter: 3 }
-        ],
-        thoughts: [
-            {thought: 'im laughing', distortions:['labeling', 'overgeneralization'], rationalThought: 'right i am laughing'},
-            {thought: 'im jumping', distortions:['labeling', 'overgeneralization'], rationalThought: 'you bet i am'}
-        ]
+        
     },
     {
         description: "I feel sad"

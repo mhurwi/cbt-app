@@ -1,15 +1,3 @@
-window.Feeling = Backbone.RelationalModel.extend({
-    urlRoot: '/incidents',
-    idAttribute: '_id'
-});
-
-
-window.Thought = Backbone.RelationalModel.extend({
-    urlRoot:'/incidents',
-    idAttribute:'_id'
-});
-
-
 window.Incident = Backbone.RelationalModel.extend({
 
     urlRoot: "/incidents",
@@ -19,10 +7,10 @@ window.Incident = Backbone.RelationalModel.extend({
     relations:[{
         type: Backbone.HasMany,
         key: 'feelings',
-        relatedModel: 'window.Feeling',
+        relatedModel: 'Feeling',
         reverseRelation: {
             key: 'incident',
-            includeInJSON: '_id'
+            includeInJSON: 'pooop'
         }
     },
     {
@@ -67,7 +55,6 @@ window.Incident = Backbone.RelationalModel.extend({
     defaults: {
         _id: null,
         description: "",
-        feelings: {},
         // [
         //     {
         //     feelingName: "",
@@ -75,7 +62,6 @@ window.Incident = Backbone.RelationalModel.extend({
         //     intensityAfter:""
         //     }
         // ],
-        thoughts: {},
         // [
         //     {
         //     thought: "",
@@ -84,8 +70,11 @@ window.Incident = Backbone.RelationalModel.extend({
         //     }
         // ],
         picture: null
-    }
+    },
+
 });
+
+
 
 window.IncidentCollection = Backbone.Collection.extend({
 
@@ -93,4 +82,15 @@ window.IncidentCollection = Backbone.Collection.extend({
 
     url: "/incidents"
 
+});
+
+window.Feeling = Backbone.RelationalModel.extend({
+    urlRoot: '/incidents',
+    idAttribute: '_id'
+});
+
+
+window.Thought = Backbone.RelationalModel.extend({
+    urlRoot:'/incidents',
+    idAttribute:'_id'
 });
