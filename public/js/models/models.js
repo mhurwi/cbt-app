@@ -1,8 +1,39 @@
-window.Incident = Backbone.Model.extend({
+window.Feeling = Backbone.RelationalModel.extend({
+    urlRoot: '/incidents',
+    idAttribute: '_id'
+});
+
+
+window.Thought = Backbone.RelationalModel.extend({
+    urlRoot:'/incidents',
+    idAttribute:'_id'
+});
+
+
+window.Incident = Backbone.RelationalModel.extend({
 
     urlRoot: "/incidents",
 
     idAttribute: "_id",
+
+    relations:[{
+        type: Backbone.HasMany,
+        key: 'feelings',
+        relatedModel: 'window.Feeling',
+        reverseRelation: {
+            key: 'incident',
+            includeInJSON: '_id'
+        }
+    },
+    {
+        type: Backbone.HasMany,
+        key: 'thoughts',
+        relatedModel: 'window.Thought',
+        reverseRelation: {
+            key: 'incident',
+            includeInJSON: '_id'
+        }
+    }],
 
     initialize: function () {
         this.validators = {};
