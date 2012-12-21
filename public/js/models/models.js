@@ -10,7 +10,7 @@ window.Incident = Backbone.RelationalModel.extend({
         relatedModel: 'Feeling',
         reverseRelation: {
             key: 'incident',
-            includeInJSON: 'pooop'
+            includeInJSON: '_id'
         }
     },
     {
